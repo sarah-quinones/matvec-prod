@@ -1,0 +1,23 @@
+---
+Checks:          '*,-abseil-*,-fuchsia-*,-google-*,-llvm-*,-zircon-*,
+                  -clang-diagnostic-c++98-compat-pedantic,
+                  -clang-diagnostic-unused-macros,
+                  -cppcoreguidelines-avoid-magic-numbers,
+                  -cppcoreguidelines-macro-usage,
+                  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+
+                  # https://github.com/isocpp/CppCoreGuidelines/issues/1589,
+                  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+
+                  -modernize-use-trailing-return-type,
+                  -readability-braces-around-statements,
+                  -readability-magic-numbers,
+                  -readability-misleading-indentation,
+                  -readability-named-parameter,
+                  '
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none
+CheckOptions:
+  - key:             misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value:           '1'
