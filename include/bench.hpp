@@ -13,22 +13,30 @@
 
 #include "simd.hpp"
 
+#define SWALLOW_SEMICOLON struct unused_with_placeholder_id_##__LINE__
+
 #ifdef BM_EIGEN
-#define BENCH_EIGEN(...) BENCHMARK_TEMPLATE(__VA_ARGS__);
+#define BENCH_EIGEN(...)                                                       \
+  BENCHMARK_TEMPLATE(__VA_ARGS__);                                             \
+  SWALLOW_SEMICOLON
 #else
-#define BENCH_EIGEN(...)
+#define BENCH_EIGEN(...) SWALLOW_SEMICOLON
 #endif
 
 #ifdef BM_BLAZE
-#define BENCH_BLAZE(...) BENCHMARK_TEMPLATE(__VA_ARGS__);
+#define BENCH_BLAZE(...)                                                       \
+  BENCHMARK_TEMPLATE(__VA_ARGS__);                                             \
+  SWALLOW_SEMICOLON
 #else
-#define BENCH_BLAZE(...)
+#define BENCH_BLAZE(...) SWALLOW_SEMICOLON
 #endif
 
 #ifdef BM_SIMD
-#define BENCH_SIMD_(...) BENCHMARK_TEMPLATE(__VA_ARGS__);
+#define BENCH_SIMD_(...)                                                       \
+  BENCHMARK_TEMPLATE(__VA_ARGS__);                                             \
+  SWALLOW_SEMICOLON
 #else
-#define BENCH_SIMD_(...)
+#define BENCH_SIMD_(...) SWALLOW_SEMICOLON
 #endif
 
 template <
@@ -166,12 +174,42 @@ void run_bench(const std::string& name);
   extern template void blaze_::prod(                                           \
       Mat<T, NRows, NCols> const&, Vec<T, NCols> const&, Vec<T, NRows>&);      \
   extern template void matvec::prod(                                           \
-      Mat<T, NRows, NCols> const&, Vec<T, NCols> const&, Vec<T, NRows>&);
+      Mat<T, NRows, NCols> const&, Vec<T, NCols> const&, Vec<T, NRows>&)
+
+#define EXTERN_4(T, NRows, NCols)                                              \
+  EXTERN_TPL(T, (NRows), (NCols));                                             \
+  EXTERN_TPL(T, (NRows) + 1, (NCols));                                         \
+  EXTERN_TPL(T, (NRows) + 2, (NCols));                                         \
+  EXTERN_TPL(T, (NRows) + 3, (NCols))
+
+#define EXTERN_16(T, NRows, NCols)                                             \
+  EXTERN_4(T, (NRows), (NCols));                                               \
+  EXTERN_4(T, (NRows) + 4, (NCols));                                           \
+  EXTERN_4(T, (NRows) + 8, (NCols));                                           \
+  EXTERN_4(T, (NRows) + 12, (NCols))
+
+#define EXTERN_64(T, NRows, NCols)                                             \
+  EXTERN_16(T, (NRows), (NCols));                                              \
+  EXTERN_16(T, (NRows) + 16, (NCols));                                         \
+  EXTERN_16(T, (NRows) + 32, (NCols));                                         \
+  EXTERN_16(T, (NRows) + 48, (NCols))
+
+#define EXTERN_128(T, NRows, NCols)                                            \
+  EXTERN_64(T, (NRows), (NCols));                                              \
+  EXTERN_64(T, (NRows) + 64, (NCols))
+
+#define EXTERN_128_ALL                                                         \
+  EXTERN_128(f32, 0, 2);                                                       \
+  EXTERN_128(f32, 0, 4);                                                       \
+  EXTERN_128(f32, 0, 8);                                                       \
+                                                                               \
+  EXTERN_128(f64, 0, 2);                                                       \
+  EXTERN_128(f64, 0, 4);                                                       \
+  EXTERN_128(f64, 0, 8)
 
 #define RUN_BENCHMARKS(T, NCols, NRows)                                        \
-  BENCH_BLAZE(bm_blaze, T, NRows, NCols)                                       \
-  BENCH_EIGEN(bm_eigen, T, NRows, NCols)                                       \
-  BENCH_SIMD_(bm_simd_, T, NRows, NCols)                                       \
-  EXTERN_TPL(T, NCols, NRows)
+  BENCH_BLAZE(bm_blaze, T, (NRows), (NCols));                                  \
+  BENCH_EIGEN(bm_eigen, T, (NRows), (NCols));                                  \
+  BENCH_SIMD_(bm_simd_, T, (NRows), (NCols))
 
 #endif

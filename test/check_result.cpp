@@ -5,35 +5,7 @@
 #include "bench.hpp"
 #include "simd.hpp"
 
-#define EXTERN_4(T, NRows, NCols)                                              \
-  EXTERN_TPL(T, NRows, NCols)                                                  \
-  EXTERN_TPL(T, NRows + 1, NCols)                                              \
-  EXTERN_TPL(T, NRows + 2, NCols)                                              \
-  EXTERN_TPL(T, NRows + 3, NCols)
-
-#define EXTERN_16(T, NRows, NCols)                                             \
-  EXTERN_4(T, NRows, NCols)                                                    \
-  EXTERN_4(T, NRows + 4, NCols)                                                \
-  EXTERN_4(T, NRows + 8, NCols)                                                \
-  EXTERN_4(T, NRows + 12, NCols)
-
-#define EXTERN_64(T, NRows, NCols)                                             \
-  EXTERN_16(T, NRows, NCols)                                                   \
-  EXTERN_16(T, NRows + 16, NCols)                                              \
-  EXTERN_16(T, NRows + 32, NCols)                                              \
-  EXTERN_16(T, NRows + 48, NCols)
-
-#define EXTERN_128(T, NRows, NCols)                                            \
-  EXTERN_64(T, NRows, NCols)                                                   \
-  EXTERN_64(T, NRows + 64, NCols)
-
-EXTERN_128(f32, 0, 2)
-EXTERN_128(f32, 0, 4)
-EXTERN_128(f32, 0, 8)
-
-EXTERN_128(f64, 0, 2)
-EXTERN_128(f64, 0, 4)
-EXTERN_128(f64, 0, 8)
+EXTERN_128_ALL;
 
 template <typename T, int n_rows, int n_cols> void check_result() {
   Mat<T, n_rows, n_cols> mat{};
