@@ -1,13 +1,6 @@
 #ifndef INCLUDE_SIMD
 #define INCLUDE_SIMD
-#include <immintrin.h>
-#include <xmmintrin.h>
 #include <x86intrin.h>
-
-#include "boost/preprocessor.hpp"
-
-#include "benchmark/benchmark.h"
-
 #include "utility.hpp"
 
 // Let the compiler unroll the loops for now
