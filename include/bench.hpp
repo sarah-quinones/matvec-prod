@@ -149,7 +149,7 @@ NOINLINE void bm_blaze(benchmark::State& state) {
 }
 
 template <typename T, int n_rows, int n_cols>
-NOINLINE void bm_compiler(benchmark::State& state) {
+NOINLINE void bm_loop_(benchmark::State& state) {
   bm<loop_, T, n_rows, n_cols>(state);
 }
 
