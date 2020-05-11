@@ -6,14 +6,12 @@
 
 #ifdef _MSC_VER
 #define INLINE __forceinline inline
+#define NOINLINE __declspec(noinline)
+#define RESTRICT __restrict
 #else
 #define INLINE [[gnu::always_inline]] inline
-#endif
-
-#ifdef _MSC_VER
-#define NOINLINE __declspec(noinline)
-#else
 #define NOINLINE [[gnu::noinline]] [[gnu::aligned(256)]]
+#define RESTRICT __restrict__
 #endif
 
 using f32 = float;

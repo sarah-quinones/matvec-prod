@@ -102,9 +102,9 @@ void loop_::prod(T const& matrix, In const& in, Out& out) {
   constexpr int Rows = T::rows();
   constexpr int Cols = T::columns();
 
-  E const* __restrict__ mat_data = matrix.data();
-  E const* __restrict__ in_data = in.data();
-  E* __restrict__ out_data = out.data();
+  E const* RESTRICT mat_data = matrix.data();
+  E const* RESTRICT in_data = in.data();
+  E* RESTRICT out_data = out.data();
 
   for (int i = 0; i < Rows; ++i) {
     out_data[i] = 0;
